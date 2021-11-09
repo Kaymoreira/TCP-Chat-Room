@@ -50,21 +50,38 @@ Aqui estao as tecnologias usadas nesse projeto
  
 1.  O socket usado foi o tcp/ip pois possui suas funções divididas em camada da mesma forma que o OSI. A diferença principal nestas estruturas é o número de camadas encontradas em cada modelo: no OSI encontramos 7 camadas, enquanto no TCP/IP somente 4: Aplicação, Transporte, Rede e Interface de rede.
 
-4. Camada Aplicação:
-* A camada de aplicação é o topo da arquitetura TCP/IP, tratada de forma monolítica, onde são realizadas a maior parte das requisições para execução de tarefas na rede. Ela faz a comunicação entre os programas e os protocolos de transporte e é responsável por tudo que está relacionado aos serviços de comunicação que visam a interação junto ao usuário.
-* O protocolo da aplicacao usado foi o AF_INET(IPv4) que usa o Ip e a porta http.
-* codigo: 
- ~~~python
+### 4. Camada Aplicação:
+* Ela é responsável pela comunicação entre programas e os protocolos de transporte, além de também está presente definição da arquitetura do sistema, como cliente-servidor, P2P; O início do processo de envio de algo pela rede ocorre nessa camada.
+* No nosso caso foi o cliente-servidor
+* Existem vários protocolos nessa camada, mas um muito conhecido é o HTTP(port). A ideia dessa camada é encapsular os dados que serão enviadas acrescentado a eles um cabeçalho com informações como o protocolo e versão utilizados, tipo de conexão, linguagem.
+
+
+### 3. Camada de Transporte
+* Essa camada é responsável pela parte de comunicação entre aplicações que executam em hospedeiros (hosts) diferentes.
+* Para ser mais específico, desempenha o papel de realizar a comunicação lógica entre os hospedeiros de forma que é responsável por garantir que os hospedeiros se comuniquem como se estivesse em uma mesma máquina, ou seja, é a camada responsável por criar garantias de que uma mensagem mensagem seja recebida por completa ou não.
+* Os protocolos mais famosos nessa capada são o TCP e o UDP, usamos o TCP. 
+* Também é nessa camada em que se fala em porta (port ou socket) que é uma interface que realiza a comunicação entre a camada de aplicação e transporte.
+* A mensagem vinda da camada acima é encapsulada e dividida formando vários segmentos que são repassados para a camada de redes.
+* codigo:
+~~~python
  # No programa servidor:
  '''
- O que acontece no lado do servidor Web é um pouco mais complexo. Primeiro, o Servidor Web cria um “soquete tipo servidor”:
+ O que acontece no lado do servidor Web é um pouco mais complexo. Primeiro, o Servidor Web 
+ cria um “soquete tipo servidor”:
  
- Algumas coisas que deves observar: usamos server.bind(('127.0.0.1', 80)) que eh soquete do tipo “servidor”, mas esse so esta visível dentro do computador em que está sendo executado. server.bind(('127.0.0.1', 80)) determina que o soquete estará acessível por qualquer computador que possuas o endereço IP do computador.
- Ja o socket.gethostname() eh usado para que o soquete esteja visível ao mundo exterior.
+ Algumas coisas que deves observar: usamos server.bind(('127.0.0.1', 80)) que eh soquete do 
+ tipo “servidor”, mas esse so esta visível dentro do computador em que está sendo executado. 
+ server.bind(('127.0.0.1', 80)) determina que o soquete estará acessível por qualquer computador 
+ que possuas o endereço IP do computador.Ja o socket.gethostname() eh usado para que o soquete 
+ esteja visível ao mundo exterior.
 
-Uma segunda coisa que precisas observar é: as portas baixas, normalmente estão reservadas para serviços “bem conhecidos”, tais como (HTTP, SNMP etc). Como essa eh apenas uma atividade de redes, utilizei um número baixo (80).
+Uma segunda coisa que precisas observar é: as portas baixas, normalmente estão reservadas 
+para serviços “bem conhecidos”, tais como (HTTP, SNMP etc). Como essa eh apenas uma atividade 
+de redes, utilizei um número baixo (80).
 
-Por fim, o argumento “listen” diz à biblioteca de soquetes que queremos enfileirar no máximo 5 requisições de conexão (normalmente o máximo) antes de recusar começar a recusar conexões externas. Caso o resto do código esteja escrito corretamente, isso deverá ser o suficiente.
+Por fim, o argumento “listen” diz à biblioteca de soquetes que queremos enfileirar no máximo 
+5 requisições de conexão (normalmente o máximo) antes de recusar começar a recusar conexões 
+externas. Caso o resto do código esteja escrito corretamente, isso deverá ser o suficiente.
 
  
  '''
@@ -87,7 +104,11 @@ Por fim, o argumento “listen” diz à biblioteca de soquetes que queremos enf
  
  # No programa cliente:
  '''
-Quando a connect (conexão) foi estabelecida, o soquete client pode ser utilizado para enviar uma solicitação de texto para a página. O mesmo soquete é que irá ler a resposta e, em seguida, o mesmo será destruído. Isso mesmo, será destruído. Os soquetes de Clientes normalmente são usados apenas numa única transação (troca) (ou um pequeno conjunto sequencial de transações).
+Quando a connect (conexão) foi estabelecida, o soquete client pode ser utilizado para 
+enviar uma solicitação de texto para a página. O mesmo soquete é que irá ler a resposta e, 
+em seguida, o mesmo será destruído. Isso mesmo, será destruído. Os soquetes de Clientes 
+normalmente são usados apenas numa única transação (troca) (ou um pequeno conjunto 
+sequencial de transações).
  '''
  import socket
 
@@ -97,18 +118,127 @@ Quando a connect (conexão) foi estabelecida, o soquete client pode ser utilizad
  client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
  # conectando o cliente ao local host e a porta http respectivamente
  client.connect(('127.0.0.1', 55555))
- 
- ~~~
-3. Camada de Transporte
+~~~
 
 
-2. dsa
+### 2. Camada Rede
+* A Camada de Rede, também conhecida como inter-redes, é responsável pela permissão de envio de pacotes por hosts a qualquer rede e pela garantia de que esses dados cheguem ao seu destino final. 
+* Equivalente ao que é operacionalizado na camada de rede do modelo OSI, na arquitetura TCP/IP a camada de rede tem como embasamento os protocolos IP (Internet Protocol) e ICMP (Internet Control Message Protocol).
+* codigo:
+~~~python
+# No programa servidor
+# Funcao que manda mensagem do servidor para todos clientes conectados
+def broadcast(msg):
+    # iremos iterar através da lista de clientes, e para cada cliente enviamos esta mensagem
+    for client in clients:
+        client.send(msg)
 
 
+# Funcao para cuidar de cada conexao de cada cliente
+def handle_client(client):
+    while True:
+        try:  # mensagem vai ser igual a mensagem recebida do cliente
+            msg = client.recv(1024)
+            '''se a mensagem for recebida com sucesso do cliente, a funcao broadcast para 
+            mandar essa mensagem para todos os outros clientes '''
+            broadcast(msg)
+        except:
+            ''' em caso de falhas ou erros de conexao, precisamos identificar o cliente que 
+            iremos derrubar da lista de clientes e do servidor '''
+            # o index vai achar a tupla no nosso caso o cliente
+            index = clients.index(client)
+            # remocao do cliente da lista de clientes
+            clients.remove(client)
+            # encerra a conexao do cliente com o servidor
+            client.close()
+            # fazendo a mesma coisa para o apelido do cliente
+            alias = aliases[index]
+            # avisa ao servidor que o cliente de tal nickname acabou de sair do servidor
+            broadcast(f'{alias} acabou de sair do chat!'.encode('utf-8'))
+            # remove o nick da lista de nicks
+            aliases.remove(alias)
+            # quebra o loop
+            break
+~~~
 
-1. dsada
-  
-  
+### 1. Camada Interface de Rede
+* Esta é a camada de base da arquitetura TCP/IP, correspondente às camadas de enlace de dados e física do OSI, onde ocorre a conexão básica do host com a rede por meio de algum protocolo capaz de enviar pacotes IP. 
+* É por meio desta camada que é possível transmitir dados a outros computadores dentro de uma mesma rede física, além de realizar o envio do datagrama recebido pela camada de internet através de meios físicos.
+* Para se manter em funcionamento a camada de Interface de rede utiliza como principais protocolos: Ethernet para Redes Locais (LAN – Local Area Network) e PPP (Point-to-Point Protocol) para Redes de Longa Distância (WAN – Wide Area Network).
+* Usamos LAN nesse caso ja que estamos num mesmo computador
+* codigo:
+~~~python
+# Programa servidor
+# Funcao principal para receber a conexao dos clientes
+def receive():
+    while True:
+        print('Servidor esta rodando ...')
+        client, address = server.accept()
+        print(f'conexao estabelecida com {str(address)}')
+        client.send('alias?'.encode('utf-8'))
+        alias = client.recv(1024)
+        # acrescentando o apelido a lista de apelidos
+        aliases.append(alias)
+        # acrescentando o cliente a lista de clientes
+        clients.append(client)
+        # mostrar mensangem retornando ao cliente qual eh o apelido dele
+        print(f'O apelido dele eh  {alias}'.encode('utf-8'))
+        # usar a funcao broadcast para mostrar a todos os clientes online que esse cliente entrou no chat room
+        broadcast(f'{alias} esta conectado ao chat'.encode('utf-8'))
+        # mandar uma mensagem do servidor para esse cliente falando que agora ele esta conectado
+        client.send('Voce esta conectado ao servidor!'.encode('utf-8'))
+
+        """ criando e startando a thread(tarefa) objeto que vai ser responsavel por rodar uma 
+            thread individual para cada cliente de forma que as threads funcionem ao mesmo tempo
+            dessa forma quando o cliente A, mandar mensagem para o cliente B, a comunicacao acontecera
+            instantaneamente gracas a esse recurso chamado multi threading do python"""
+
+        thread = threading.Thread(target=handle_client, args=(client,))
+        thread.start()
+
+
+if __name__ == "__main__":
+    receive()
+    
+# Programa cliente
+"""Criar duas funcoes para duas tarefas(threads), uma para receber mensagens de 
+outros clientes pelo servidor, e a outra funcao para enviar mensagens para outros 
+clientes pelo servidor! """
+
+
+# funcao para receber mensagens de outros clientes pelo servidor
+def client_receive():
+    while True:
+        try:
+            msg = client.recv(1024).decode('utf-8')
+            # se a msg for igual a 'alias?' que foi definido la no server.py
+            if msg == 'alias?':
+                client.send(alias.encode('utf-8'))
+            else:
+                print(msg)
+        except:
+            print('Error!')
+            client.close()
+            break
+
+
+# funcao para enviar mensagens para outros clientes pelo servidor
+def client_send():
+    while True:
+        # como vai ficar a mensagem (seunick: mensagem que digitou)
+        msg = f'{alias}: {input("")}'
+        # mandando a mensagem
+        client.send(msg.encode('utf-8'))
+
+
+""" Criando e startando duas threads(tarefas), uma para receber mensagens 
+e uma para enviar mensagens"""
+receive_thread = threading.Thread(target=client_receive)
+receive_thread.start()
+
+send_thread = threading.Thread(target=client_send)
+send_thread.start()
+~~~
  
  
 ## Links
