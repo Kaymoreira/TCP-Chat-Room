@@ -48,7 +48,7 @@ Aqui estao as tecnologias usadas nesse projeto
 * Logo depois de escolher o nick voce entrara no servidor, e quem ja estiver la vai receber uma mensagem dizendo que vc se conectou no servidor, e para voce vai aparecer a mensagem "Voce esta conectado ao servidor".
 * Pronto agora eh so outro cliente se conectar da mesma forma que esse passo a passo e voces poderam conversar pelo servidor!!!
 
- 
+
  
 ## Protocolo da Aplicacao:
 
@@ -264,6 +264,14 @@ send_thread.start()
 * Processador: Intel Celeron J4105 ou AMD FX-4100 ou superiores
 * Memória RAM: 4 GB ou superior
 
+## Detalhando o protocolo da camada de aplicacao:
+1. Como servidor os passos da camada sao:
+* O servidor fica on e entao manda para o cliente o "alias?" se o cliente mandar de volta o "alias?" igual entao o server acrescenta na lista de clientes e de nicks.
+* E coloca na tela o apelido do cliente e avisa q ele esta conectado ao chat para todo mundo que esta on
+2. Como o cliente os passos da camada sao:
+* Caso uma mensagem X do cliente seja enviada ao servidor ela vai ser formatada pela funcao client_send e entao enviada como tarefa pela send_thread.
+* Nesse momento ela chega no servidor e nesse ela vai para a funcao broadcast que eh chamada na funcao handle_client e eh responsavel por enviar esse conteudo da msg para todos no servidor.
+* Para a mensagem X chegar em outro cliente entao depois desse processo citado acima no servidor ela chega atraves da funcao client_receive onde ela eh decodificada e atraves do receive_thread ela chega no cliente.
 
  
 ## Links
