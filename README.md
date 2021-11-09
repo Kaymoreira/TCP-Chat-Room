@@ -239,29 +239,48 @@ receive_thread.start()
 send_thread = threading.Thread(target=client_send)
 send_thread.start()
 ~~~
- 
+
+## Funcionamento do software:
+1. Proposito do software:
+* Gerar uma comunicacao de dois clientes ou mais atraves, de um chat, por intermedio de um servidor
+2. Motivacao da escolha do software:
+* Minha motivacao pra fazer o projeto foi pelo simplicidade de codigo porem com um peso maior de conhecimento sobre os assuntos relacionados ao protocolo tcp entre outros conhecimentos da propria materia de redes.
+3. Motivacao da escolha do protocolo TCP/IP:
+* O protocolo UDP (sigla para User Datagram Protocol) tem, como característica essencial, um atributo que pode parecer esquisito para os iniciantes no tema - a falta de confiabilidade.
+* Para nosso caso eh essencial a confiabilidade pois Entendendo o UDP, fica claro nosso problema - a falta de confiabilidade dele fez com que as mensagens trocadas pelo bate-papo se corrompessem de diversas formas!
+* Entao a melhor alternativa para o Chat-room foi o TCP pois ele é voltado à conexão e tem como garantia a integridade e ordem de todos os dados.
+* O nome SYN,SYN-ACK,ACK é uma resumida descrição de como esse handshake funciona. A conexão entre dois hosts começa com o primeiro enviando ao segundo um pacote de sincronização (SYNchronize).
+* O segundo host recebe esse pacote e responde com a confirmação do sincronização (SYNchronize-ACKnowledgment). O primeiro host, por fim, manda uma confirmação (ACKnowledge) para o segundo, assim estabelecendo a conexão.
+* Com o TCP, de fato temos uma conexão entre um ponto e outro, comumente chamados de servidor e cliente. É interessante notar que o TCP permite o envio simultâneo de dados de ambos os pontos ao outro, durante todo o fluxo de comunicação.
+* Desse modo, o TCP é ideal para casos em que a confiabilidade dos dados é essencial, como quando se trata de mensagens de texto! 
+4. Requisitos minimos de funcionamento:
+* Sistema operacional: Windows 7, Mac OS X 10.9, Linux distribuição de 2014 ou mais recentes
+* Processador: Intel Celeron J4105 ou AMD FX-4100 ou superiores
+* Memória RAM: 4 GB ou superior
+
+
  
 ## Links
  
-  - Link of deployed application: (if has been deployed)
-  - Repository: https://link_of_repository
-    - In case of sensitive bugs like security vulnerabilities, please contact
-      YOUR EMAIL directly instead of using issue tracker. We value your effort
-      to improve the security and privacy of this project!
+  - Repository: https://https://github.com/Kaymoreira/TCP-Chat-Room
+    - Em caso de bugs sensíveis, como vulnerabilidades de segurança, por favor entre em contato:
+      kayque221023@gmail.com, diretamente em vez de usar o rastreador de problemas. Nós valorizamos seu esforço
+      para melhorar a segurança e privacidade deste projeto!
  
  
-## Versioning
+## Versão
  
 1.0.0.0
  
  
-## Authors
+## Autor
  
 * **KAYQUE MOREIRA**: @Kaymoreira (https://github.com/Kaymoreira)
  
  
-Please follow github and join us!
-Thanks to visiting me and good coding!
+Por favor, siga o meu github 😁! 
+
+Obrigado por me visitar e boa codificação 😎!
 
 
 
