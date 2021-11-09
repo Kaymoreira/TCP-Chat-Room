@@ -45,22 +45,24 @@ Aqui estao as tecnologias usadas nesse projeto
  
  
 ## Protocolo da Aplicacao:
+
+![](./assets/Screenshot_2.jpg)
  
 1.  O socket usado foi o tcp/ip pois possui suas funções divididas em camada da mesma forma que o OSI. A diferença principal nestas estruturas é o número de camadas encontradas em cada modelo: no OSI encontramos 7 camadas, enquanto no TCP/IP somente 4: Aplicação, Transporte, Rede e Interface de rede.
 
-2. Aplicação:
+4. Camada Aplicação:
 * A camada de aplicação é o topo da arquitetura TCP/IP, tratada de forma monolítica, onde são realizadas a maior parte das requisições para execução de tarefas na rede. Ela faz a comunicação entre os programas e os protocolos de transporte e é responsável por tudo que está relacionado aos serviços de comunicação que visam a interação junto ao usuário.
-* O protocolo da aplicacao usado foi o AF_INET(IPv4)
+* O protocolo da aplicacao usado foi o AF_INET(IPv4) que usa o Ip e a porta http.
 * codigo: 
  ~~~python
  # No programa servidor:
  '''
  O que acontece no lado do servidor Web é um pouco mais complexo. Primeiro, o Servidor Web cria um “soquete tipo servidor”:
  
- Algumas coisas que deves observar: usamos server.bind(('127.0.0.1', 55555)) que eh soquete do tipo “servidor”, mas esse so esta visível dentro do computador em que está sendo executado. server.bind(('', 80)) determina que o soquete estará acessível por qualquer computador que possuas o endereço IP do computador.
+ Algumas coisas que deves observar: usamos server.bind(('127.0.0.1', 80)) que eh soquete do tipo “servidor”, mas esse so esta visível dentro do computador em que está sendo executado. server.bind(('127.0.0.1', 80)) determina que o soquete estará acessível por qualquer computador que possuas o endereço IP do computador.
  Ja o socket.gethostname() eh usado para que o soquete esteja visível ao mundo exterior.
 
-Uma segunda coisa que precisas observar é: as portas baixas, normalmente estão reservadas para serviços “bem conhecidos”, tais como (HTTP, SNMP etc). Como essa eh apenas uma atividade de redes, utilizei um número alto (55555).
+Uma segunda coisa que precisas observar é: as portas baixas, normalmente estão reservadas para serviços “bem conhecidos”, tais como (HTTP, SNMP etc). Como essa eh apenas uma atividade de redes, utilizei um número baixo (80).
 
 Por fim, o argumento “listen” diz à biblioteca de soquetes que queremos enfileirar no máximo 5 requisições de conexão (normalmente o máximo) antes de recusar começar a recusar conexões externas. Caso o resto do código esteja escrito corretamente, isso deverá ser o suficiente.
 
@@ -68,7 +70,7 @@ Por fim, o argumento “listen” diz à biblioteca de soquetes que queremos enf
  '''
  import socket
 
- # setando o host ip e a porta para o servidor rodar
+ # setando o host ip e a porta http para o servidor rodar
  host = '127.0.0.1'
  port = 55555
 
@@ -93,11 +95,18 @@ Quando a connect (conexão) foi estabelecida, o soquete client pode ser utilizad
  alias = input('Escolha um nick para voce >>> ')
  # criando um objeto cliente
  client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
- # conectando o cliente ao local host e a porta respectivamente
- client.connect(('127.0.0.1', 59000))
+ # conectando o cliente ao local host e a porta http respectivamente
+ client.connect(('127.0.0.1', 55555))
  
  ~~~
-3. 
+3. Camada de Transporte
+
+
+2. dsa
+
+
+
+1. dsada
   
   
  
