@@ -270,7 +270,7 @@ send_thread.start()
  
   - Repository: https://https://github.com/Kaymoreira/TCP-Chat-Room
     - Em caso de bugs sensíveis, como vulnerabilidades de segurança, por favor entre em contato:
-      kayque221023@gmail.com, diretamente em vez de usar o rastreador de problemas. Nós valorizamos seu esforço
+      kayque221023@gmail.com, diretamente em vez de usar o rastreador de problemas. Valorizamos seu esforço
       para melhorar a segurança e privacidade deste projeto!
  
  
